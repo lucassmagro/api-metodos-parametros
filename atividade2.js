@@ -62,10 +62,29 @@ calcule o Índice de Massa Corporal (IMC) e retorne o resultado
 */
 
 app.get("/calcularimc", (req, res) => {
-  const peso = parseInt(req.query.peso);
-  const altura = req.query.altura;
-  const imc = 
+  const peso = parseFloat(req.query.peso);
+  const altura = parseFloat(req.query.altura);
+  const imc = peso / (altura * altura);
 
+  res.send(`O IMC é ${imc}`);
+});
+
+/*
+5) Crie um método POST chamado [calcularmedia] que receba um JSON com uma lista de números e retorne a média
+desses números.
+*/
+
+app.post("/calcularmedia", (req, res) => {
+  const numeros = req.body.numeros;
+  let soma = 0;
+
+  for (let numero of numeros) {
+    soma = soma + numero;
+  }
+
+  const media = soma / numeros.length;
+
+  res.send(`A media e ${media}.`);
 });
 
 app.listen(4000, () => {
