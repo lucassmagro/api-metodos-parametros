@@ -87,6 +87,42 @@ app.post("/calcularmedia", (req, res) => {
   res.send(`A media e ${media}.`);
 });
 
+/*
+6) Crie um método GET chamado [calculararea] que receba os parâmetros base e altura (ambos do tipo RouteParams)
+e calcule a área de um retângulo.
+*/
+
+app.get("/calculararea/:base/:altura", (req, res) => {
+  const base = parseFloat(req.params.base);
+  const altura = parseFloat(req.params.altura);
+
+  const areaRetangulo = base * altura;
+
+  res.send(`A area do retangulo e ${areaRetangulo}.`);
+});
+
+/*
+7) Crie um método POST| chamado [convertermoeda] que receba os parâmetros valor, moedaOrigem e moedaDestino
+(todos em json com BodyParams) e realize a conversão da moeda de origem para a moeda de destino. Utilize taxas de câmbio fictícias.
+*/
+
+app.post("/convertermoeda", (req, res) => {
+  const valor = req.body.valor;
+  const moedaOrigem = req.body.moedaOrigem;
+  const moedaDestino = req.body.moedaDestino;
+
+  const taxas = {
+    BRL: 0.2,
+    USD: 1.0,
+    EUR: 1.1,
+  };
+
+  const valorBase = valor / taxas[moedaOrigem];
+  const valorFinal = valorBase * taxas[moedaDestino];
+
+  res.send(`Valor convertido: ${valorFinal.toFixed(2)} ${moedaDestino}`);
+});
+
 app.listen(4000, () => {
   console.log("API rodando na porta 4000.");
 });
