@@ -123,6 +123,102 @@ app.post("/convertermoeda", (req, res) => {
   res.send(`Valor convertido: ${valorFinal.toFixed(2)} ${moedaDestino}`);
 });
 
+/*
+8) Crie um método POST chamado [calcularfrete] que receba um JSON com as informações do pedido (peso,
+distância, tipo de entrega) e calcule o valor do frete. Você deve escolher qual o valor cobrado por kg e por km para
+considerar no cálculo. Considere valores diferentes para cada tipo de entrega (normal ou rápida).
+*/
+
+app.post("/calcularfrete", (req, res) => {
+  const peso = req.body.peso;
+  const distancia = req.body.distancia;
+  const tipoEntrega = req.body.tipoEntrega;
+
+  const taxas = {
+    normal: { porKg: 2.0, porKm: 0.5 },
+    rapida: { porKg: 4.0, porKm: 1.0 },
+  };
+
+  const taxaEscolhida = taxas[tipoEntrega];
+  const frete = peso * taxaEscolhida.porKg + distancia * taxaEscolhida.porKm;
+
+  res.send(`O valor do frete é R$ ${frete.toFixed(2)}`);
+});
+
+/*
+9) Crie um método GET chamado [autenticarusuario] que receba os parâmetros usuario e senha através do
+HeaderParams. Implemente um sistema de autenticação simples (por exemplo, comparando com um conjunto fixo de
+credenciais) e retorne uma mensagem indicando se a autenticação foi bem-sucedida ou falhou.
+*/
+
+app.get("/autenticarusuario", (req, res) => {
+  const usuario = req.headers.usuario;
+  const senha = req.headers.senha;
+
+  const credenciais = {
+    usuario: "admin",
+    senha: "1234",
+  };
+
+  if (usuario == credenciais.usuario && senha == credenciais.senha) {
+    res.send("Atenticacao realizada com sucesso!");
+  } else {
+    res.send("Autenticacao falhou!");
+  }
+});
+
+/*
+10) Crie um método GET chamado [verificarmes] que receba o parâmetro ms numérico de 1 a 12 através do
+HeaderParams. Retorne o mês escrito por extenso.
+*/
+
+app.get("/verificarmes", (req, res) => {
+  const ms = req.headers.ms;
+  const meses = {
+    1: "Janeiro",
+    2: "Fevereiro",
+    3: "Março",
+    4: "Abril",
+    5: "Maio",
+    6: "Junho",
+    7: "Julho",
+    8: "Agosto",
+    9: "Setembro",
+    10: "Outubro",
+    11: "Novembro",
+    12: "Dezembro",
+  };
+  const mesPorExtenso = meses[ms];
+
+  if (mesPorExtenso) {
+    res.send(`O mes e: ${mesPorExtenso}`);
+  } else {
+    res.send("Mês inválido!");
+  }
+});
+
+/*
+11) Crie um método POST chamado [calculartotal] que receba um json com uma lista de produtos: nome, valorunitario, quantidade. 
+Implemente o cálculo do valor total de toda a lista de produtos. Exemplo de json:
+[
+  {"nome": "Produto A", "quantidade": 2, "valorunitario": 1.5},
+  {"nome": "Produto B", "quantidade": 8, "valorunitario": 6.2}
+]
+*/
+
+app.post("/calculartotal", (req, res) => {
+  const produtos = req.body; // pega a lista inteira
+  let total = 0;
+
+  for (let produto of produtos) {
+    const subtotal = produto.quantidade * produto.valorunitario;
+
+    total = total + subtotal; // dentro do for
+  }
+
+  res.send(`O valor total é R$ ${total.toFixed(2)}`);
+});
+
 app.listen(4000, () => {
   console.log("API rodando na porta 4000.");
 });
