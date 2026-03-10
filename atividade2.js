@@ -50,7 +50,7 @@ app.post("/validaridade", (req, res) => {
   const idade = req.body.idade;
 
   if (idade >= 18) {
-    req.send(`${nome} você é maior de idade`);
+    res.send(`${nome} você é maior de idade`);
   } else {
     res.send(`${nome} você é menor de idade`);
   }
